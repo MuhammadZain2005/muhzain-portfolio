@@ -1,15 +1,18 @@
 import { cn } from "@/lib/utils";
 import { Home, FolderKanban, Github, Menu, X, User, Briefcase } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
 
 const navItems = [
-  { name: "Home", href: "#hero", icon: Home },
-  { name: "About", href: "#about", icon: User },
-  { name: "Experience", href: "#experience", icon: Briefcase },
-  { name: "Projects", href: "#projects", icon: FolderKanban },
-  { name: "Contact", href: "#contact", icon: Github },
+  { name: "Home", hash: "hero", icon: Home },
+  { name: "About", hash: "about", icon: User },
+  { name: "Experience", hash: "experience", icon: Briefcase },
+  { name: "Projects", hash: "projects", icon: FolderKanban },
+  { name: "Contact", hash: "contact", icon: Github },
 ];
+
+const routeItems = [{ name: "Blog", to: "/blog", icon: FolderKanban }];
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -39,10 +42,11 @@ export const Navbar = () => {
       {/* Desktop Navigation */}
       <div className="hidden md:flex items-center justify-between bg-background/50 backdrop-blur-xl border-2 border-primary/40 rounded-full px-8 py-2.5 navbar-glow">
         {/* Avatar/Logo */}
-        <a
-          href="#hero"
+        <Link
+          to={{ pathname: "/", hash: "#hero" }}
           className="flex-shrink-0 group"
           aria-label="Home"
+          preventScrollReset
         >
           <div className="w-11 h-11 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/30 flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:scale-110 group-hover:border-primary/60">
             <img 
@@ -51,21 +55,21 @@ export const Navbar = () => {
               className="w-7 h-7 object-cover"
             />
           </div>
-        </a>
+        </Link>
 
         {/* Navigation Icons */}
         <div className="flex items-center gap-1 ml-8">
           {navItems.map((item) => {
-            const sectionId = item.href.replace('#', '');
-            const isActive = activeSection === sectionId;
+            const isActive = activeSection === item.hash;
             const Icon = item.icon;
             
             return (
-              <a
+              <Link
                 key={item.name}
-                href={item.href}
+                to={{ pathname: "/", hash: `#${item.hash}` }}
                 className="relative group px-3 py-3"
                 aria-label={item.name}
+                preventScrollReset
               >
                 <div className="relative">
                   <Icon 
@@ -91,7 +95,26 @@ export const Navbar = () => {
                     isActive ? "w-6" : "w-0 group-hover:w-4"
                   )}
                 />
-              </a>
+              </Link>
+            );
+          })}
+
+          {/* Route Links */}
+          {routeItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.name}
+                to={item.to}
+                className="relative group px-3 py-3"
+                aria-label={item.name}
+              >
+                <div className="relative">
+                  <Icon className="w-[22px] h-[22px] text-foreground/60 group-hover:text-foreground transition-all duration-300 group-hover:scale-125 group-hover:-translate-y-2" />
+                  <div className="absolute inset-0 rounded-full blur-md bg-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
+                </div>
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-primary rounded-full transition-all duration-300 w-0 group-hover:w-4" />
+              </Link>
             );
           })}
           
@@ -104,10 +127,11 @@ export const Navbar = () => {
 
       {/* Mobile Navigation */}
       <div className="md:hidden flex items-center justify-between bg-background/50 backdrop-blur-xl border-2 border-primary/40 rounded-full px-6 py-2.5 navbar-glow">
-        <a
-          href="#hero"
+        <Link
+          to={{ pathname: "/", hash: "#hero" }}
           className="flex-shrink-0"
           aria-label="Home"
+          preventScrollReset
         >
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/30 flex items-center justify-center overflow-hidden">
             <img 
@@ -116,7 +140,7 @@ export const Navbar = () => {
               className="w-6 h-6 object-cover"
             />
           </div>
-        </a>
+        </Link>
 
         <div className="flex items-center gap-4">
           <ThemeToggle />
@@ -142,14 +166,13 @@ export const Navbar = () => {
       >
         <div className="flex flex-col space-y-8">
           {navItems.map((item) => {
-            const sectionId = item.href.replace('#', '');
-            const isActive = activeSection === sectionId;
+            const isActive = activeSection === item.hash;
             const Icon = item.icon;
             
             return (
-              <a
+              <Link
                 key={item.name}
-                href={item.href}
+                to={{ pathname: "/", hash: `#${item.hash}` }}
                 className={cn(
                   "flex items-center gap-4 text-xl transition-all duration-300 group",
                   isActive 
@@ -157,6 +180,7 @@ export const Navbar = () => {
                     : "text-foreground/80 hover:text-primary"
                 )}
                 onClick={() => setIsMenuOpen(false)}
+                preventScrollReset
               >
                 <div className="relative">
                   <Icon className="w-6 h-6 group-hover:scale-125 group-hover:-translate-y-1 transition-all duration-300" />
@@ -164,7 +188,24 @@ export const Navbar = () => {
                   <div className="absolute inset-0 rounded-full blur-md bg-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
                 </div>
                 {item.name}
-              </a>
+              </Link>
+            );
+          })}
+          {routeItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.name}
+                to={item.to}
+                className="flex items-center gap-4 text-xl transition-all duration-300 group text-foreground/80 hover:text-primary"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <div className="relative">
+                  <Icon className="w-6 h-6 group-hover:scale-125 group-hover:-translate-y-1 transition-all duration-300" />
+                  <div className="absolute inset-0 rounded-full blur-md bg-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
+                </div>
+                {item.name}
+              </Link>
             );
           })}
         </div>

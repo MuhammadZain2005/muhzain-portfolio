@@ -1,14 +1,29 @@
-import { ArrowRight, ExternalLink, Github } from "lucide-react";
+import { ArrowRight, Github, FileText } from "lucide-react";
+import { 
+  SiPytorch, 
+  SiTensorflow, 
+  SiPython, 
+  SiCplusplus,
+  SiReact, 
+  SiNodedotjs, 
+  SiStripe,
+  SiOpenjdk,
+  SiFirebase
+} from "react-icons/si";
 
 const projects = [
   {
     id: 1,
-    title: "Enhanced GCN for Energy Prediction",
+    title: "GNN-CeramicMap",
     description: "Built a custom GCN layer with distance-aware edge features, outperforming traditional models like N2P2 in atomic energy prediction.",
     image: "/projects/project1.png",
-    tags: ["Pytorch", "TensorFlow", "Python"],
-    demoUrl: "#",
-    githubUrl: "#",
+    technologies: [
+      { name: "PyTorch", icon: SiPytorch, color: "#EE4C2C" },
+      { name: "TensorFlow", icon: SiTensorflow, color: "#FF6F00" },
+      { name: "Python", icon: SiPython, color: "#3776AB" },
+    ],
+    githubUrl: "https://github.com/MuhammadZain2005/GNN-CeramicMap",
+    blogUrl: "/blog/gnn-ceramicmap",
   },
   {
     id: 2,
@@ -16,18 +31,24 @@ const projects = [
     description:
       "A lightweight 3D ray tracer implemented in C. Supports vector math, ray–sphere intersections, Lambertian shading, hard shadows, anti-aliasing, and PPM output.",
     image: "/projects/main.png",
-    tags: ["C", "Vector Math", "PPM"],
+    technologies: [
+      { name: "C++", icon: SiCplusplus, color: "#00599C" },
+    ],
     githubUrl: "https://github.com/MuhammadZain2005/3D-Ray-Tracer",
+    blogUrl: "/blog/3d-ray-tracer",
   },
   {
     id: 3,
-    title: "E-commerce Platform",
+    title: "EmotiLog",
     description:
-      "Full-featured e-commerce platform with user authentication and payment processing.",
+      "Android mood tracker designed for quick and easy daily emotional journaling. Users can tap emotion icons on the home screen to log their feelings with automatic timestamps.",
     image: "/projects/project3.png",
-    tags: ["React", "Node.js", "Stripe"],
-    demoUrl: "#",
-    githubUrl: "#",
+    technologies: [
+      { name: "Java", icon: SiOpenjdk, color: "#ED8B00" },
+      { name: "Firebase", icon: SiFirebase, color: "#FFCA28" },
+    ],
+    githubUrl: "https://github.com/MuhammadZain2005/EmotiLog",
+    blogUrl: "/blog/emotilog",
   },
 ];
 
@@ -49,7 +70,7 @@ export const ProjectsSection = () => {
           {projects.map((project, key) => (
             <div
               key={key}
-              className="group bg-card rounded-lg overflow-hidden shadow-xs card-hover"
+              className="group bg-card rounded-lg overflow-hidden shadow-xs card-hover relative"
             >
               <div className="h-48 overflow-hidden">
                 <img
@@ -59,33 +80,51 @@ export const ProjectsSection = () => {
                 />
               </div>
 
-              <div className="p-6">
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.tags.map((tag, index) => (
-                    <span 
-                      key={`${project.id}-${tag}-${index}`}
-                      className="px-2 py-1 text-xs font-medium border rounded-full bg-secondary text-secondary-foreground"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+              <div className="p-6 pb-12">
+                <div className="project-tech-row flex flex-wrap gap-2 mb-0 items-start justify-start content-start -mx-6 px-2 -translate-y-5">
+                  {project.technologies.map((tech, index) => {
+                    const IconComponent = tech.icon;
+                    return (
+                      <div
+                        key={`${project.id}-${tech.name}-${index}`}
+                        className="flex items-center justify-center w-10 h-10 bg-background/80 backdrop-blur-sm border border-border/40 rounded-xl shrink-0"
+                        title={tech.name}
+                      >
+                        <IconComponent style={{ color: tech.color }} className="w-5 h-5" />
+                      </div>
+                    );
+                  })}
                 </div>
 
-                <h3 className="text-xl font-semibold mb-1"> {project.title}</h3>
-                <p className="text-muted-foreground text-sm mb-4">
-                  {project.description}
-                </p>
-                <div className="flex justify-between items-center">
-                  <div className="flex space-x-3">
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      className="text-foreground/80 hover:text-primary transition-colors duration-300"
-                    >
-                      <Github size={20} />
-                    </a>
-                  </div>
+                <div className="-mt-3">
+                  <h3 className="text-xl font-semibold mb-1 text-primary">{project.title}</h3>
+                  <p className="text-muted-foreground text-sm mb-4">
+                    {project.description}
+                  </p>
                 </div>
+                {/* Reserved space above; GitHub icon is positioned independently */}
+              </div>
+
+              {/* Bottom-right GitHub link - independent from content layout */}
+              <div className="absolute bottom-4 right-4 flex items-center gap-3">
+                {project.blogUrl && (
+                  <a
+                    href={project.blogUrl}
+                    aria-label={`Read the blog post for ${project.title}`}
+                    className="text-foreground/80 hover:text-primary transition-colors duration-300"
+                  >
+                    <FileText size={22} />
+                  </a>
+                )}
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Open ${project.title} on GitHub`}
+                  className="text-foreground/80 hover:text-primary transition-colors duration-300"
+                >
+                  <Github size={24} />
+                </a>
               </div>
             </div>
           ))}
@@ -95,7 +134,7 @@ export const ProjectsSection = () => {
           <a
             className="cosmic-button w-fit flex items-center mx-auto gap-2"
             target="_blank"
-            href="https://github.com/machadop1407"
+            href="https://github.com/MuhammadZain2005"
           >
             Check My Github <ArrowRight size={16} />
           </a>
