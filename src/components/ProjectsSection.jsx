@@ -1,4 +1,5 @@
 import { ArrowRight, Github, FileText } from "lucide-react";
+import { Link } from "react-router-dom";
 import { 
   SiPytorch, 
   SiTensorflow, 
@@ -108,13 +109,14 @@ export const ProjectsSection = () => {
               {/* Bottom-right GitHub link - independent from content layout */}
               <div className="absolute bottom-4 right-4 flex items-center gap-3">
                 {project.blogUrl && (
-                  <a
-                    href={project.blogUrl}
+                  <Link
+                    to={project.blogUrl}
                     aria-label={`Read the blog post for ${project.title}`}
                     className="text-foreground/80 hover:text-primary transition-colors duration-300"
+                    preventScrollReset
                   >
                     <FileText size={22} />
-                  </a>
+                  </Link>
                 )}
                 <a
                   href={project.githubUrl}
