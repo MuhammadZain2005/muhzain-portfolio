@@ -9,11 +9,12 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export const ContactSection = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const formRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,6 +28,18 @@ export const ContactSection = () => {
       });
       setIsSubmitting(false);
     }, 1500);
+  };
+
+  const handleMailto = () => {
+    const form = formRef.current;
+    const name = form?.name?.value || "";
+    const email = form?.email?.value || "";
+    const message = form?.message?.value || "";
+
+    const subject = encodeURIComponent("Portfolio Contact");
+    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
+
+    window.location.href = `mailto:muhammadzainasad6@gmail.com?subject=${subject}&body=${body}`;
   };
   return (
     <section id="contact" className="pt-32 pb-24 px-4 relative bg-secondary/30">
@@ -126,7 +139,7 @@ export const ContactSection = () => {
           >
             <h3 className="text-2xl font-semibold mb-6"> Send a Message</h3>
 
-            <form className="space-y-6">
+            <form ref={formRef} className="space-y-6">
               <div>
                 <label
                   htmlFor="name"
@@ -180,13 +193,13 @@ export const ContactSection = () => {
               </div>
 
               <button
-                type="submit"
-                disabled={isSubmitting}
+                type="button"
+                onClick={handleMailto}
                 className={cn(
                   "cosmic-button w-full flex items-center justify-center gap-2"
                 )}
               >
-                {isSubmitting ? "Sending..." : "Send Message"}
+                Send Message
                 <Send size={16} />
               </button>
             </form>
